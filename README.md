@@ -17,7 +17,7 @@ kubectl
 heptio awws-iam-authenticator
 
 
-##Files 
+## Files 
 ```
 ├── README.md
 ├── files
@@ -148,7 +148,7 @@ terraform destroy
 ```
 
 
-##Known Issues
+## Known Issues
 1. Found issue when I had the spot instances price to low. (Nodes will not deploy if prices is to low. You can set worker_nodes.tf)
 
 2. Nodes will not talk to Masters until you deploy the confimap config-map-auth-aws (This why I added local_exec_auth_eks.tf which updates kubeconfig and uses kubectl to apply config-map-aws-auth.yaml)
