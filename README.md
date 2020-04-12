@@ -1,6 +1,5 @@
 # eks-cluster_deploy
-# EKS CLuster Deploy
-##Purpose
+## Purpose
 This terraform scripts does the following:
   1. Creates a AWS VPC with a Internet Gateway, Nat Gateway, public and private subnets.
   2. Creates EKS cluster using Spot Instances and Nodes with a autoscaling group.
