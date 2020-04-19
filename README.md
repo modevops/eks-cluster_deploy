@@ -10,11 +10,12 @@ This terraform scripts does the following:
 See https://www.terraform.io/docs/providers/aws/guides/eks-getting-started.html for full guide
 
 ## Requirements
+```
 AWS Account
 Terraform
 kubectl
 heptio awws-iam-authenticator
-
+```
 
 ## Files 
 ```
