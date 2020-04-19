@@ -5,7 +5,7 @@
 #  * EKS Cluster
 #
 resource "aws_eks_cluster" "eks_cluster" {
-  name = local.cluster_name
+  name = module.stack_vars.cluster_name
   role_arn = aws_iam_role.eks_cluster_role.arn
   vpc_config {
 
@@ -14,7 +14,7 @@ resource "aws_eks_cluster" "eks_cluster" {
       aws_security_group.eks-workers.id,
       var.public_sg_id
     ]
-    subnet_ids = [var.public_subnets[0].id, var.public_subnets[1].id, var.public_subnets[2].id]
+    subnet_ids = [var.private_subnets[0].id, var.private_subnets[1].id, var.private_subnets[2].id]
   }
   depends_on = [
     # These aren't explicitly part of the dependency tree TF generates

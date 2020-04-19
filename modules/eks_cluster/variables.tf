@@ -3,7 +3,6 @@ module "stack_vars" { source = "../stack" }
 
 
 locals {
-  cluster_name = "eks-${module.stack_vars.environment_name}-${module.stack_vars.project_name}-cluster"
   worker_nodes_names  =  "eks-${module.stack_vars.environment_name}-${module.stack_vars.project_name}-nodes"
 }
 

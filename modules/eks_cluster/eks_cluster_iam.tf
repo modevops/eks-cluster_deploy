@@ -1,7 +1,7 @@
 # IAM role for the cluster
 
 resource "aws_iam_role" "eks_cluster_role" {
-  name               = "eks-${local.cluster_name}-cluster-role"
+  name               = "eks-${module.stack_vars.cluster_name}-cluster-role"
   description        = "Allows EKS to manage clusters on your behalf."
   assume_role_policy = <<POLICY
 {

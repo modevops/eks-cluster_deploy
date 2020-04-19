@@ -48,3 +48,7 @@ output "public_subnets" {
 output "public_subnets_ids" {
   value = aws_subnet.public_subnets.*.id
 }
+
+output "cluster_name" {
+  value = "var.cluster_name"
+}

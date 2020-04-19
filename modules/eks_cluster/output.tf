@@ -7,7 +7,7 @@ apiVersion: v1
 clusters:
 - cluster:
     server: "${aws_eks_cluster.eks_cluster.endpoint}"
-    certificate-authority-data: "${local.cluster_name}".certificate_authority[0].data
+    certificate-authority-data: "${module.stack_vars.cluster_name}".certificate_authority[0].data
   name: kubernetes
 contexts:
 - context:
@@ -26,7 +26,7 @@ users:
       args:
         - "token"
         - "-i"
-        - "${local.cluster_name}"
+        - "${module.stack_vars.cluster_name}"
 KUBECONFIG
 
 }
@@ -57,10 +57,11 @@ CONFIGMAPAWSAUTH
 
 }
 
+
 output "config-map-aws-auth" {
   value = local.config-map-aws-auth
 }
 
 output "cluster_name" {
-  value = "locals.cluster_name"
+  value = module.stack_vars.cluster_name
 }

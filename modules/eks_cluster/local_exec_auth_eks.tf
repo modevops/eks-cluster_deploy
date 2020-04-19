@@ -4,7 +4,7 @@
 // ----------------------------------------------------------------------------
 resource "null_resource" "kubeconfig" {
   provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --name ${local.cluster_name}"
+    command = "aws eks update-kubeconfig --name ${module.stack_vars.cluster_name}"
     interpreter = ["/bin/bash", "-c"]
   }
   depends_on = [

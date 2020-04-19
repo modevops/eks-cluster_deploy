@@ -1,3 +1,5 @@
+
+
 resource "aws_subnet" "public_subnets" {
   count = var.create_public_subnets ? length(var.public_subnet_cidrs) : 0
 
@@ -9,6 +11,19 @@ resource "aws_subnet" "public_subnets" {
 
   {
     "Name" = format("%s-Public-%s", module.stack_vars.environment_name,  element(var.availability_zones, count.index))
+    KubernetesCluster        = "${module.stack_vars.environment_name}-ingress"
+    "kubernetes.io/role/elb" = "1"
+
+  },
+   {
+    key = "kubernetes.io/cluster/${module.stack_vars.cluster_name}"
+    value = "shared"
+    propagate_at_launch = true
+  },
+
+  {
+    KubernetesCluster        = module.stack_vars.cluster_name
+    "kubernetes.io/role/elb" = "1"
   }
   )
 }
@@ -25,6 +40,12 @@ resource "aws_subnet" "private_subnets" {
 
   {
     "Name" = format("%s-Public-%s", module.stack_vars.environment_name,  element(var.availability_zones, count.index))
+
+  },
+  {
+    key = "kubernetes.io/cluster/${module.stack_vars.cluster_name}"
+    value = "shared"
+    propagate_at_launch = true
   }
   )
 }

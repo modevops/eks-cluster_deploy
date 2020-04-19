@@ -21,3 +21,7 @@ variable "cluster_conf" {
     }
   }
 }
+
+locals  {
+  cluster_name = "eks-${var.environment_name}-${var.project_name}-cluster"
+}

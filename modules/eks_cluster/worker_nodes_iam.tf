@@ -1,7 +1,7 @@
 # ==============================================================================
 # Worker Node Role and Profile
 resource "aws_iam_role" "eks_workers_role" {
-  name               = "eks-${local.cluster_name}-node-role"
+  name               = "eks-${module.stack_vars.cluster_name}-node-role"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -39,6 +39,6 @@ resource "aws_iam_role_policy_attachment" "eks_nodes_enable_ssm" {
 }
 
 resource "aws_iam_instance_profile" "worker_nodes" {
-  name = "${local.cluster_name}-profile"
+  name = "${module.stack_vars.cluster_name}-profile"
   role = aws_iam_role.eks_workers_role.name
 }

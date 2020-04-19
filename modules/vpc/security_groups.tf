@@ -4,7 +4,7 @@ resource "aws_security_group" "public-sg" {
   name = "Public"
   description = "allow all traffic to firewall"
   vpc_id = aws_vpc.main.id
-  egress {
+  ingress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -18,8 +18,18 @@ resource "aws_security_group" "public-sg" {
     cidr_blocks = [local.workstation-external-cidr]
   }
 
-  tags =  { "Name" = format("%s-PublicSecurityGroup", module.stack_vars.environment_name )
+  tags =  { "Name" = format("%s-PublicSecurityGroup", module.stack_vars.environment_name),KubernetesCluster = module.stack_vars.cluster_name,
+    "kubernetes.io/role/elb" = "1"
+
 }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 
 }
 
@@ -35,7 +45,7 @@ resource "aws_security_group" "internal-sg" {
     to_port = 0
     protocol = "-1"
     cidr_blocks = [
-      var.cidr_block]
+      var.cidr_block, local.workstation-external-cidr]
   }
 
   egress {
@@ -47,6 +57,14 @@ resource "aws_security_group" "internal-sg" {
   }
 
   tags = {
-    "Name" = format("%s-InternalSecurityGroup", module.stack_vars.environment_name)
+    "Name" = format("%s-InternalSecurityGroup", module.stack_vars.environment_name),
+
+    key                 = "kubernetes.io/cluster/${module.stack_vars.cluster_name}"
+    value               = "shared",
+    propagate_at_launch = true
+
   }
+
+
+
 }

@@ -17,7 +17,7 @@ locals {
   eks-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks_cluster.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks_cluster.certificate_authority.0.data}' '${local.cluster_name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks_cluster.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks_cluster.certificate_authority.0.data}' '${module.stack_vars.cluster_name}'
 USERDATA
 }
 
@@ -29,7 +29,7 @@ resource "aws_launch_configuration" "eks_nodes" {
   iam_instance_profile        = aws_iam_instance_profile.worker_nodes.name
   image_id                    = data.aws_ami.eks_workers.id
   instance_type               = "m4.large"
-  name_prefix                 = "${local.worker_nodes_names}"
+  name_prefix                 = local.worker_nodes_names
   security_groups             = [aws_security_group.eks-workers.id,var.internal_sg_id,var.public_sg_id]
   spot_price                  = "0.06"
   key_name                    =  var.key_name
@@ -51,7 +51,7 @@ resource "aws_autoscaling_group" "eks_nodes" {
   min_size = module.stack_vars.cluster_conf.count.max
   name = local.worker_nodes_names
 
-  vpc_zone_identifier =  [var.public_subnets[0].id, var.public_subnets[1].id, var.public_subnets[2].id]
+  vpc_zone_identifier =  [var.private_subnets[0].id, var.private_subnets[1].id, var.private_subnets[2].id]
 
   tag {
     key = "Name"
@@ -60,8 +60,8 @@ resource "aws_autoscaling_group" "eks_nodes" {
   }
 
   tag {
-    key = "kubernetes.io/cluster/${local.cluster_name}"
-    value = "owned"
+    key = "kubernetes.io/cluster/${module.stack_vars.cluster_name}"
+    value = "shared"
     propagate_at_launch = true
   }
 }

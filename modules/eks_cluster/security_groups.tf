@@ -13,6 +13,14 @@ resource "aws_security_group" "eks-cluster" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+
+
+  tags = {
+    key                 = "kubernetes.io/cluster/${module.stack_vars.cluster_name}"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+
 }
 
 resource "aws_security_group_rule" "eks-cluster-ingress-node-https" {
@@ -67,6 +75,14 @@ resource "aws_security_group" "eks-workers" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+
+  tags = {
+    key                 = "kubernetes.io/cluster/${module.stack_vars.cluster_name}"
+    value               = "shared"
+    propagate_at_launch = true
   }
 
 
